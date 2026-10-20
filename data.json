@@ -2663,10 +2663,10 @@
     "sessions": [
       {
         "start": "20260923",
-        "end": null,
+        "end": "20261010",
         "notes": null,
-        "rating": null,
-        "progress": 30
+        "rating": 9,
+        "progress": 100
       }
     ]
   },
