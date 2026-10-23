@@ -1,5 +1,10 @@
 use std::env;
+use std::fs;
 use std::process;
+
+use serde::{Deserialize, Serialize};
+
+// helpers
 
 fn today() -> String {
     let result = process::Command::new("date")
@@ -16,6 +21,27 @@ fn parse_date(val: &str) -> Result<String, &'static str> {
         Err("invalid date (expected YYYYMMDD)")
     }
 }
+
+// core data structures
+
+#[derive(Serialize, Deserialize)]
+struct Session {
+    start: Option<String>,
+    end: Option<String>,
+    notes: Option<String>,
+    rating: Option<u8>,
+    progress: Option<u8>
+}
+
+#[derive(Serialize, Deserialize)]
+struct Book {
+    isbn: Option<String>,
+    title: String,
+    authors: Vec<String>,
+    sessions: Vec<Session>
+}
+
+// start subcommand
 
 struct StartArgs {
     isbn: String,
@@ -55,11 +81,17 @@ impl StartArgs {
 }
 
 fn start(args: StartArgs) {
+    let raw = fs::read_to_string("data.json").expect("data.json read failed");
+    let mut books: Vec<Book> = serde_json::from_str(&raw).expect("data.json parse failed");
     println!("{}", args.isbn);
     println!("{}", args.date);
     println!("{}", args.authors.join(", "));
     println!("{}", args.title);
+    // let out = serde_json::to_string_pretty(&books).expect("data.json serialization failed");
+    // fs::write("data.json", out).expect("data.json write failed");
 }
+
+// rate subcommand
 
 struct RateArgs {
     id: i8,
@@ -106,6 +138,8 @@ fn rate(args: RateArgs) {
     println!("{}", args.date);
     println!("{}", args.progress);
 }
+
+// entrypoint stuff
 
 enum Subcommand {
     List,
