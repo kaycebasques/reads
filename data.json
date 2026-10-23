@@ -208,6 +208,38 @@
     ]
   },
   {
+    "isbn": "9781250185433",
+    "title": "Rogue Protocol",
+    "authors": [
+      "Martha Wells"
+    ],
+    "sessions": [
+      {
+        "start": "20261011",
+        "end": "20261022",
+        "notes": null,
+        "rating": 8,
+        "progress": 100
+      }
+    ]
+  },
+  {
+    "isbn": "9781250191854",
+    "title": "Exit Strategy",
+    "authors": [
+      "Martha Wells"
+    ],
+    "sessions": [
+      {
+        "start": "20261023",
+        "end": null,
+        "notes": null,
+        "rating": null,
+        "progress": 0
+      }
+    ]
+  },
+  {
     "isbn": "9781429513609",
     "title": "A New Earth",
     "authors": [
@@ -1138,7 +1170,7 @@
   {
     "isbn": "9780691168487",
     "title": "e: The story of a number",
-    "authors": null,
+    "authors": ["Eli Maor"],
     "sessions": [
       {
         "start": "20260817",
