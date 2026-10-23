@@ -28,7 +28,7 @@ impl StartArgs {
     fn build(args: &[String]) -> Result<StartArgs, &'static str> {
         let mut isbn = None;
         let mut authors = None;
-        let mut date = today();
+        let mut date = None;
         let mut title = None;
         for arg in args {
             let (key, val) = arg
@@ -40,7 +40,7 @@ impl StartArgs {
                 "authors" => authors = Some(
                     val.split(',').map(|s| s.trim().to_string()).collect()
                 ),
-                "date" => date = parse_date(val)?,
+                "date" => date = Some(parse_date(val)?),
                 "title" => title = Some(val.to_string()),
                 _ => return Err("unknown arg")
             }
@@ -48,7 +48,7 @@ impl StartArgs {
         Ok(StartArgs {
             isbn: isbn.ok_or("missing --isbn")?,
             authors: authors.ok_or("missing --authors")?,
-            date: date,
+            date: date.ok_or("missing --date")?,
             title: title.ok_or("missing --title")?
         })
     }
