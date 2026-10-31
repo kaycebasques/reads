@@ -1,4 +1,25 @@
 [
+
+
+  {
+    "isbn": "9780804136693",
+    "title": "Superforecasting",
+    "authors": [
+      "Philip E. Tetlock",
+      "Dan Gardner"
+    ],
+    "sessions": [
+      {
+        "start": "20261030",
+        "end": null,
+        "notes": null,
+        "rating": null,
+        "progress": null
+      }
+    ]
+  },
+
+
   {
     "isbn": "9786057462220",
     "title": "1984",
