@@ -253,10 +253,10 @@
     "sessions": [
       {
         "start": "20261023",
-        "end": null,
+        "end": "20261103",
         "notes": null,
-        "rating": null,
-        "progress": 0
+        "rating": 7,
+        "progress": 100
       }
     ]
   },
