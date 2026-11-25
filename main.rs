@@ -1,10 +1,18 @@
 use std::env;
 use std::fs;
+use std::path::PathBuf;
 use std::process;
 
 use serde::{Deserialize, Serialize};
 
 // helpers
+
+fn data_path() -> PathBuf {
+    match env::var("BUILD_WORKSPACE_DIRECTORY") {
+        Ok(dir) => PathBuf::from(dir).join("data.json"),
+        Err(_) => PathBuf::from("data.json"),
+    }
+}
 
 fn today() -> String {
     let result = process::Command::new("date")
@@ -23,8 +31,13 @@ fn parse_date(val: &str) -> Result<String, &'static str> {
 }
 
 fn load_books() -> Vec<Book> {
-    let raw = fs::read_to_string("data.json").expect("data.json read failed");
+    let raw = fs::read_to_string(data_path()).expect("data.json read failed");
     serde_json::from_str(&raw).expect("data.json parse failed")
+}
+
+fn save_books(books: &[Book]) {
+    let out = serde_json::to_string_pretty(books).expect("data.json serialization failed");
+    fs::write(data_path(), out).expect("data.json write failed");
 }
 
 // core data structures
@@ -39,6 +52,15 @@ struct Session {
 }
 
 impl Session {
+    fn new (start: String) -> Self {
+        Self {
+            start: Some(start),
+            end: None,
+            notes: None,
+            rating: None,
+            progress: None
+        }
+    }
     fn is_active(&self) -> bool {
         self.start.is_some() && self.end.is_none()
     }
@@ -53,15 +75,31 @@ struct Book {
 }
 
 impl Book {
+    fn matches(&self, isbn: Option<&str>, title: &str) -> bool {
+        match (self.isbn.as_deref(), isbn) {
+            (Some(a), Some(b)) => a == b,
+            _ => self.title.eq_ignore_ascii_case(title),
+        }
+    }
+
     fn is_active(&self) -> bool {
         self.sessions.iter().any(Session::is_active)
+    }
+
+    fn active_session_mut(&mut self) -> Option<&mut Session> {
+        for session in &mut self.sessions {
+            if session.is_active() {
+                return Some(session);
+            }
+        }
+        None
     }
 }
 
 // start subcommand
 
 struct StartArgs {
-    isbn: String,
+    isbn: Option<String>,
     authors: Vec<String>,
     date: String,
     title: String
@@ -89,7 +127,7 @@ impl StartArgs {
             }
         }
         Ok(StartArgs {
-            isbn: isbn.ok_or("missing --isbn")?,
+            isbn: isbn,
             authors: authors.ok_or("missing --authors")?,
             date: date.ok_or("missing --date")?,
             title: title.ok_or("missing --title")?
@@ -98,29 +136,40 @@ impl StartArgs {
 }
 
 fn start(args: StartArgs) {
-    // let books = load_books();
-    println!("{}", args.isbn);
-    println!("{}", args.date);
-    println!("{}", args.authors.join(", "));
-    println!("{}", args.title);
-    // let out = serde_json::to_string_pretty(&books).expect("data.json serialization failed");
-    // fs::write("data.json", out).expect("data.json write failed");
+    let mut books = load_books();
+    let session = Session::new(args.date);
+    if let Some(book) = books
+        .iter_mut()
+        .find(|b| b.matches(args.isbn.as_deref(), &args.title))
+    {
+        if book.is_active() {
+            eprintln!("book already active");
+            process::exit(1);
+        }
+        books.push(Book {
+            isbn: args.isbn,
+            title: args.title,
+            authors: args.authors,
+            sessions: vec![session]
+        });
+    }
+    save_books(&books);
 }
 
 // rate subcommand
 
 struct RateArgs {
-    id: i8,
-    rating: i8,
-    progress: i8,
-    notes: String,
+    id: usize,
+    rating: u8,
+    progress: u8,
+    notes: Option<String>,
     date: String
 }
 
 impl RateArgs {
     fn build(args: &[String]) -> Result<RateArgs, &'static str> {
         let mut id = None;
-        // let mut notes = None;
+        let mut notes = None;
         let mut rating = None;
         let mut progress = 100;
         let mut date = today();
@@ -134,25 +183,30 @@ impl RateArgs {
                 "rating" => rating = Some(val.parse().map_err(|_| "invalid rating")?),
                 "progress" => progress = val.parse().map_err(|_| "invalid progress")?,
                 "date" => date = parse_date(val)?,
+                "notes" => notes = Some(val.to_string()),
                 _ => return Err("unknown arg")
             }
         }
         Ok(RateArgs {
             id: id.ok_or("missing --id")?,
             rating: rating.ok_or("missing --rating")?,
-            progress: progress,
-            notes: "TODO".to_string(),
-            date: date
+            progress,
+            notes,
+            date
         })
     }
 }
 
 fn rate(args: RateArgs) {
-    println!("{}", args.id);
-    println!("{}", args.rating);
-    println!("{}", args.notes);
-    println!("{}", args.date);
-    println!("{}", args.progress);
+    let mut books = load_books();
+    let book = books.get_mut(args.id).expect("invalid book id");
+    let session = book.active_session_mut().expect("no active session found");
+    session.end = Some(args.date);
+    session.rating = Some(args.rating);
+    session.progress = Some(args.progress);
+    session.notes = args.notes;
+    save_books(&books);
+    println!("saved rating ({}) for {}", args.rating, books[args.id].title);
 }
 
 // ls subcommand
