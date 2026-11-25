@@ -22,6 +22,11 @@ fn parse_date(val: &str) -> Result<String, &'static str> {
     }
 }
 
+fn load_books() -> Vec<Book> {
+    let raw = fs::read_to_string("data.json").expect("data.json read failed");
+    serde_json::from_str(&raw).expect("data.json parse failed")
+}
+
 // core data structures
 
 #[derive(Serialize, Deserialize)]
@@ -33,12 +38,24 @@ struct Session {
     progress: Option<u8>
 }
 
+impl Session {
+    fn is_active(&self) -> bool {
+        self.start.is_some() && self.end.is_none()
+    }
+}
+
 #[derive(Serialize, Deserialize)]
 struct Book {
     isbn: Option<String>,
     title: String,
     authors: Vec<String>,
     sessions: Vec<Session>
+}
+
+impl Book {
+    fn is_active(&self) -> bool {
+        self.sessions.iter().any(Session::is_active)
+    }
 }
 
 // start subcommand
@@ -81,8 +98,7 @@ impl StartArgs {
 }
 
 fn start(args: StartArgs) {
-    let raw = fs::read_to_string("data.json").expect("data.json read failed");
-    let mut books: Vec<Book> = serde_json::from_str(&raw).expect("data.json parse failed");
+    // let books = load_books();
     println!("{}", args.isbn);
     println!("{}", args.date);
     println!("{}", args.authors.join(", "));
@@ -139,10 +155,19 @@ fn rate(args: RateArgs) {
     println!("{}", args.progress);
 }
 
+// ls subcommand
+
+fn ls() {
+    let books = load_books();
+    for (id, book) in books.iter().enumerate().filter(|(_, b)| b.is_active()) {
+        println!("[{id}] {}", book.title);
+    }
+}
+
 // entrypoint stuff
 
 enum Subcommand {
-    List,
+    Ls,
     Rate(RateArgs),
     Start(StartArgs)
 }
@@ -150,7 +175,7 @@ enum Subcommand {
 impl Subcommand {
     fn build(args: &[String]) -> Result<Subcommand, &'static str> {
         match args[1].as_str() {
-            "ls" => Ok(Subcommand::List),
+            "ls" => Ok(Subcommand::Ls),
             "rate" => {
                 let args = RateArgs::build(&args[2..])?;
                 Ok(Subcommand::Rate(args))
@@ -166,7 +191,7 @@ impl Subcommand {
 
 fn run(subcommand: Subcommand) {
     match subcommand {
-        Subcommand::List => println!("ls"),
+        Subcommand::Ls => ls(),
         Subcommand::Rate(args) => rate(args),
         Subcommand::Start(args) => start(args),
     }
