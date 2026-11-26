@@ -1,6 +1,4 @@
 [
-
-
   {
     "isbn": "9780804136693",
     "title": "Superforecasting",
@@ -18,8 +16,6 @@
       }
     ]
   },
-
-
   {
     "isbn": "9786057462220",
     "title": "1984",
@@ -184,7 +180,7 @@
     "isbn": "9780142002780",
     "title": "A Matter of Degrees",
     "authors": [
-      "Gino Segr\u00e8"
+      "Gino Segrè"
     ],
     "sessions": [
       {
@@ -390,7 +386,7 @@
   },
   {
     "isbn": "9780333640494",
-    "title": "Alice\u2019s Adventures in Wonderland / Through the Looking-Glass",
+    "title": "Alice’s Adventures in Wonderland / Through the Looking-Glass",
     "authors": [
       "Lewis Carroll"
     ],
@@ -936,7 +932,7 @@
     "isbn": "9781473562523",
     "title": "Dare to Lead",
     "authors": [
-      "Bren\u00e9 Brown"
+      "Brené Brown"
     ],
     "sessions": [
       {
@@ -1191,7 +1187,9 @@
   {
     "isbn": "9780691168487",
     "title": "e: The story of a number",
-    "authors": ["Eli Maor"],
+    "authors": [
+      "Eli Maor"
+    ],
     "sessions": [
       {
         "start": "20260817",
@@ -1236,7 +1234,7 @@
   },
   {
     "isbn": "9780812532531",
-    "title": "Ender\u2019s Game",
+    "title": "Ender’s Game",
     "authors": [
       "Orson Scott Card"
     ],
@@ -1574,7 +1572,7 @@
     "isbn": "9781119740223",
     "title": "Geopolitical Alpha",
     "authors": [
-      "Marko Papi\u0107"
+      "Marko Papić"
     ],
     "sessions": [
       {
@@ -2341,7 +2339,7 @@
   },
   {
     "isbn": "9688534250",
-    "title": "Man\u2019s Search for Meaning",
+    "title": "Man’s Search for Meaning",
     "authors": [
       "Viktor E. Frankl"
     ],
@@ -2613,7 +2611,7 @@
   },
   {
     "isbn": "9788447307333",
-    "title": "One Flew Over the Cuckoo\u2019s Nest",
+    "title": "One Flew Over the Cuckoo’s Nest",
     "authors": [
       "Ken Kesey"
     ],
@@ -2663,7 +2661,7 @@
     "isbn": "9781846550621",
     "title": "Peeling the Onion",
     "authors": [
-      "G\u00fcnter Grass"
+      "Günter Grass"
     ],
     "sessions": [
       {
@@ -2935,7 +2933,7 @@
     "isbn": "9780471770886",
     "title": "Reminiscences of a Stock Operator",
     "authors": [
-      "Edwin Lef\u00e8vre"
+      "Edwin Lefèvre"
     ],
     "sessions": [
       {
@@ -3288,7 +3286,7 @@
     "isbn": "9781646792641",
     "title": "Storm of Steel",
     "authors": [
-      "Ernst J\u00fcnger"
+      "Ernst Jünger"
     ],
     "sessions": [
       {
@@ -3656,7 +3654,7 @@
     "isbn": "9780330520102",
     "title": "The City & The City",
     "authors": [
-      "China Mi\u00e9ville"
+      "China Miéville"
     ],
     "sessions": [
       {
@@ -4141,10 +4139,10 @@
     "sessions": [
       {
         "start": "20260801",
-        "end": null,
+        "end": "20260901",
         "notes": null,
-        "rating": null,
-        "progress": 10
+        "rating": 7,
+        "progress": 100
       }
     ]
   },
@@ -4200,7 +4198,7 @@
     "isbn": "9781447678618",
     "title": "The Little Book of Deep Learning",
     "authors": [
-      "Fran\u00e7ois Fleuret"
+      "François Fleuret"
     ],
     "sessions": [
       {
@@ -4488,7 +4486,7 @@
     "isbn": "9780007183500",
     "title": "The Places That Scare You",
     "authors": [
-      "Pema Ch\u00f6dr\u00f6n"
+      "Pema Chödrön"
     ],
     "sessions": [
       {
@@ -4568,7 +4566,7 @@
     "isbn": "9781648337192",
     "title": "The Prince",
     "authors": [
-      "Niccol\u00f2 Machiavelli"
+      "Niccolò Machiavelli"
     ],
     "sessions": [
       {
@@ -5470,7 +5468,7 @@
     "isbn": "9781570621604",
     "title": "When Things Fall Apart",
     "authors": [
-      "Pema Ch\u00f6dr\u00f6n"
+      "Pema Chödrön"
     ],
     "sessions": [
       {
