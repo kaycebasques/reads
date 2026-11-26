@@ -5663,5 +5663,21 @@
         "progress": 100
       }
     ]
+  },
+  {
+    "isbn": "9781250826978",
+    "title": "System Collapse",
+    "authors": [
+      "Martha Wells"
+    ],
+    "sessions": [
+      {
+        "start": "20261125",
+        "end": null,
+        "notes": null,
+        "rating": null,
+        "progress": null
+      }
+    ]
   }
 ]
