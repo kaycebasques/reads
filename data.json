@@ -5657,10 +5657,10 @@
     "sessions": [
       {
         "start": "20261101",
-        "end": null,
+        "end": "20261126",
         "notes": null,
-        "rating": null,
-        "progress": null
+        "rating": 8,
+        "progress": 100
       }
     ]
   }
