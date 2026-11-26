@@ -5647,5 +5647,21 @@
         "progress": 100
       }
     ]
+  },
+  {
+    "isbn": "9781250765376",
+    "title": "Fugitive Telemetry",
+    "authors": [
+      "Martha Wells"
+    ],
+    "sessions": [
+      {
+        "start": "20261101",
+        "end": null,
+        "notes": null,
+        "rating": null,
+        "progress": null
+      }
+    ]
   }
 ]
