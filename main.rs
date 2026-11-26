@@ -40,6 +40,19 @@ fn save_books(books: &[Book]) {
     fs::write(data_path(), out).expect("data.json write failed");
 }
 
+fn find_book<'a>(
+    books: &'a mut [Book],
+    isbn: Option<&str>,
+    title: &str
+) -> Option<&'a mut Book> {
+    for book in books {
+        if book.matches(isbn, title) {
+            return Some(book);
+        }
+    }
+    None
+}
+
 // core data structures
 
 #[derive(Serialize, Deserialize)]
@@ -138,21 +151,23 @@ impl StartArgs {
 fn start(args: StartArgs) {
     let mut books = load_books();
     let session = Session::new(args.date);
-    if let Some(book) = books
-        .iter_mut()
-        .find(|b| b.matches(args.isbn.as_deref(), &args.title))
-    {
+    if let Some(book) = find_book(&mut books, args.isbn.as_deref(), &args.title) {
         if book.is_active() {
             eprintln!("book already active");
             process::exit(1);
         }
-        books.push(Book {
-            isbn: args.isbn,
-            title: args.title,
-            authors: args.authors,
-            sessions: vec![session]
-        });
+        book.sessions.push(session);
+        println!("book found, starting new session");
+        save_books(&books);
+        return;
     }
+    println!("creating first session for new book");
+    books.push(Book {
+        isbn: args.isbn,
+        title: args.title,
+        authors: args.authors,
+        sessions: vec![session]
+    });
     save_books(&books);
 }
 
